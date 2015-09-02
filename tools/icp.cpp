@@ -56,6 +56,7 @@ typedef Cloud::Ptr CloudPtr;
 int
 main (int argc, char **argv)
 {
+  //pcl::console::setVerbosityLevel( pcl::console::L_VERBOSE );
   double dist = 0.05;
   pcl::console::parse_argument (argc, argv, "-d", dist);
 
@@ -86,6 +87,7 @@ main (int argc, char **argv)
 
   Eigen::Matrix4f t (Eigen::Matrix4f::Identity ());
 
+  std::cout << "*******************################" << std::endl;
   for (size_t i = 1; i < pcd_indices.size (); i++)
   {
     CloudPtr data (new Cloud);
@@ -113,15 +115,20 @@ main (int argc, char **argv)
     icp->setMaxCorrespondenceDistance (dist);
     icp->setRANSACOutlierRejectionThreshold (rans);
 
-    icp->setInputTarget (model);
+    std::cout << "*********************************************" << std::endl;
+    std::cout << icp->getMaximumIterations() << " "
+	      << icp->getMaxCorrespondenceDistance() << " "
+	      << icp->getTransformationEpsilon() << std::endl;
 
+
+    icp->setInputTarget (model);
     icp->setInputSource (data);
 
     CloudPtr tmp (new Cloud);
     icp->align (*tmp);
 
     t = t * icp->getFinalTransformation ();
-
+    std::cout << t << std::endl;
     pcl::transformPointCloud (*data, *tmp, t);
 
     std::cout << icp->getFinalTransformation () << std::endl;

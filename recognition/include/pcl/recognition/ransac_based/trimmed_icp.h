@@ -52,6 +52,7 @@
 #include <pcl/correspondence.h>
 #include <pcl/point_cloud.h>
 #include <pcl/pcl_exports.h>
+#include "auxiliary.h"
 #include <limits>
 
 namespace pcl

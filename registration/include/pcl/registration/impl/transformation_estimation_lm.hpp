@@ -42,6 +42,7 @@
 
 #include <pcl/registration/warp_point_rigid.h>
 #include <pcl/registration/warp_point_rigid_6d.h>
+#include <pcl/registration/warp_point_rigid_7d.h>
 #include <pcl/registration/distances.h>
 #include <unsupported/Eigen/NonLinearOptimization>
 
@@ -53,7 +54,8 @@ pcl::registration::TransformationEstimationLM<PointSource, PointTarget, MatScala
   , tmp_tgt_ ()
   , tmp_idx_src_ ()
   , tmp_idx_tgt_ ()
-  , warp_point_ (new WarpPointRigid6D<PointSource, PointTarget, MatScalar>)
+  , warp_point_ (new WarpPointRigid7D<PointSource, PointTarget, MatScalar>)
+    //, warp_point_ (new WarpPointRigid6D<PointSource, PointTarget, MatScalar>)
 {
 };
 
@@ -85,6 +87,7 @@ pcl::registration::TransformationEstimationLM<PointSource, PointTarget, MatScala
   VectorX x (n_unknowns);
   x.setZero ();
   
+  if( warp_point_->getDimension() == 7 ) { x[6] = 0.0; }
   // Set temporary pointers
   tmp_src_ = &cloud_src;
   tmp_tgt_ = &cloud_tgt;
@@ -164,6 +167,7 @@ pcl::registration::TransformationEstimationLM<PointSource, PointTarget, MatScala
   VectorX x (n_unknowns);
   x.setConstant (n_unknowns, 0);
 
+  if( warp_point_->getDimension() == 7 ) { x[6] = 0.0; }
   // Set temporary pointers
   tmp_src_ = &cloud_src;
   tmp_tgt_ = &cloud_tgt;
